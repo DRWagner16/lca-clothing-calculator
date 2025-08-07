@@ -132,3 +132,41 @@ input[type="range"] {
     min-width: 80px; /* Prevent layout from shifting */
     text-align: center;
 }
+/* Styles for the new features */
+#reset-button {
+    display: block;
+    margin: -0.5rem auto 1.5rem auto;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #0a9396;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#reset-button:hover {
+    background-color: #005f73;
+}
+
+.equivalency-container {
+    background-color: #fffbe6;
+    border: 1px solid #ffe58f;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.equivalency-container h3 {
+    margin-top: 0;
+    color: #d4a373;
+}
+
+.equivalency-container p {
+    margin: 0.5rem 0;
+    font-size: 1.1rem;
+    color: #3d405b;
+}
