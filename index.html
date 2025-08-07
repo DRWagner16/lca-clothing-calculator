@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LCA of a T-Shirt</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
@@ -62,9 +61,21 @@
                     <span id="wash-count-display">50 washes</span>
                 </div>
             </div>
+            
+            <div class="lca-stage">
+                <h2>♻️ 5. End-of-Life</h2>
+                <p>What happens to the shirt when you're done?</p>
+                <select id="end-of-life-choice">
+                    <option value="landfill">Landfill</option>
+                    <option value="recycle">Recycle</option>
+                    <option value="incinerate">Incinerate for Energy</option>
+                </select>
+            </div>
         </div>
 
         <div class="results-container">
+            <button id="reset-button">🔄 Reset to Defaults</button>
+            
             <h2>Total Environmental Footprint</h2>
             <div class="totals-display">
                 <div class="result-item">
@@ -75,6 +86,12 @@
                     <h3>💨 Carbon Footprint ($CO_2e$):</h3>
                     <p><span id="carbon-result">0</span> kg</p>
                 </div>
+            </div>
+
+            <div class="equivalency-container">
+                <h3>💡 That's equivalent to...</h3>
+                <p id="water-equivalency"></p>
+                <p id="carbon-equivalency"></p>
             </div>
             
             <div class="charts-display">
@@ -91,7 +108,7 @@
     </main>
 
     <footer>
-        <p>A simple LCA calculator for educational purposes.</p>
+        <p>A comprehensive LCA calculator for educational purposes.</p>
     </footer>
 
     <script src="script.js"></script>
