@@ -4,18 +4,22 @@
 // Carbon is in kilograms of CO2 equivalent (kg CO2e) per t-shirt.
 const lcaData = {
     material: {
-        conventional: { water: 2700, carbon: 5.8 },
-        organic: { water: 950, carbon: 3.2 }
+        conventional: { water: 2700, carbon: 5.8 }, // High water use for irrigation
+        organic: { water: 950, carbon: 3.2 },      // Less water, no synthetic pesticides/fertilizers
+        polyester: { water: 50, carbon: 8.5 },     // Low water, but high carbon from fossil fuels
+        blend: { water: 1400, carbon: 7.2 }        // An average of conventional cotton and polyester
     },
     manufacturing: {
-        china: { water: 150, carbon: 3.1 },
-        eu: { water: 100, carbon: 1.5 }
+        china: { water: 150, carbon: 3.1 },  // Energy from a coal-heavy grid
+        usa: { water: 120, carbon: 2.0 },    // Energy from a mixed grid (gas, nuclear, renewables)
+        india: { water: 160, carbon: 2.9 },  // Water-stressed region, coal-heavy grid
+        eu: { water: 100, carbon: 1.5 },     // More renewables and efficient processes
+        brazil: { water: 90, carbon: 0.8 }   // Energy from a hydropower-dominant grid
     },
     use_phase: {
-        'hot-machine': { water: 400, carbon: 2.5 }, // 50 washes * 8L/wash
-        'cold-line': { water: 250, carbon: 0.3 }  // 50 washes * 5L/wash
+        'hot-machine': { water: 400, carbon: 2.5 }, // Energy intensive washing and drying
+        'cold-line': { water: 250, carbon: 0.3 }  // Low energy use
     }
-    // Note: We are simplifying and excluding distribution and end-of-life for this example.
 };
 
 // --- Get references to our HTML elements ---
