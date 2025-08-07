@@ -89,3 +89,27 @@ select {
     color: #ae2012;
     margin: 0.5rem 0 0 0;
 }
+/* Styles for the new chart layouts */
+.totals-display, .charts-display {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.charts-display {
+    margin-top: 2rem;
+}
+
+.chart-container {
+    flex-basis: 45%;
+    min-width: 250px;
+    text-align: center;
+}
+
+.chart-container h3 {
+    font-size: 1rem;
+    color: #001219;
+    margin-bottom: 1rem;
+}
