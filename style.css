@@ -170,3 +170,10 @@ input[type="range"] {
     font-size: 1.1rem;
     color: #3d405b;
 }
+/* Styles for the new line chart section */
+.line-charts-container {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #e0e0e0;
+    text-align: center;
+}
