@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LCA of a Cotton T-Shirt</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Interactive LCA: The Life of a T-Shirt</h1>
+        <p>Explore how your choices impact the environment. Select an option for each stage below.</p>
+    </header>
+
+    <main>
+        <div class="lca-container">
+            <div class="lca-stage">
+                <h2>1. Raw Material Extraction</h2>
+                <p>How was the cotton grown?</p>
+                <select id="material-choice">
+                    <option value="conventional">Conventional Cotton</option>
+                    <option value="organic">Organic Cotton</option>
+                </select>
+            </div>
+
+            <div class="lca-stage">
+                <h2>2. Manufacturing & Dyeing</h2>
+                <p>Where was the t-shirt made? (This affects the energy grid's carbon intensity)</p>
+                <select id="manufacturing-choice">
+                    <option value="china">China (Coal-heavy Grid)</option>
+                    <option value="eu">Europe (Renewable-heavy Grid)</option>
+                </select>
+            </div>
+
+            <div class="lca-stage">
+                <h2>3. Use Phase (Washing & Drying)</h2>
+                <p>How will you care for the shirt? (Assuming 50 wash cycles)</p>
+                <select id="use-phase-choice">
+                    <option value="hot-machine">Hot Water Wash, Machine Dry</option>
+                    <option value="cold-line">Cold Water Wash, Line Dry</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="results-container">
+            <h2>Total Environmental Footprint</h2>
+            <div class="result-item">
+                <h3>💧 Water Usage:</h3>
+                <p><span id="water-result">0</span> Liters</p>
+            </div>
+            <div class="result-item">
+                <h3>💨 Carbon Footprint ($CO_2e$):</h3>
+                <p><span id="carbon-result">0</span> kg</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>A simple LCA calculator for educational purposes.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
