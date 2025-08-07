@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LCA of a T-Shirt</title>
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -29,7 +29,7 @@
 
             <div class="lca-stage">
                 <h2>🏭 2. Manufacturing & Dyeing</h2>
-                <p>Where was the t-shirt made? (This affects the energy grid's carbon intensity)</p>
+                <p>Where was the t-shirt made?</p>
                 <select id="manufacturing-choice">
                     <option value="china">China (Coal-heavy Grid)</option>
                     <option value="usa">USA (Mixed Grid)</option>
@@ -38,9 +38,18 @@
                     <option value="brazil">Brazil (Hydro-heavy Grid)</option>
                 </select>
             </div>
+            
+            <div class="lca-stage">
+                <h2>🚚 3. Distribution</h2>
+                <p>How does the shirt get to the store?</p>
+                <select id="distribution-choice">
+                    <option value="sea">Sea Freight (Slow, Low Carbon)</option>
+                    <option value="air">Air Freight (Fast, High Carbon)</option>
+                </select>
+            </div>
 
             <div class="lca-stage">
-                <h2>🚿 3. Use Phase (Washing & Drying)</h2>
+                <h2>🚿 4. Use Phase (Washing & Drying)</h2>
                 <p>How will you care for the shirt? (Assuming 50 wash cycles)</p>
                 <select id="use-phase-choice">
                     <option value="hot-machine">Hot Water Wash, Machine Dry</option>
@@ -51,13 +60,26 @@
 
         <div class="results-container">
             <h2>Total Environmental Footprint</h2>
-            <div class="result-item">
-                <h3>💧 Water Usage:</h3>
-                <p><span id="water-result">0</span> Liters</p>
+            <div class="totals-display">
+                <div class="result-item">
+                    <h3>💧 Water Usage:</h3>
+                    <p><span id="water-result">0</span> Liters</p>
+                </div>
+                <div class="result-item">
+                    <h3>💨 Carbon Footprint ($CO_2e$):</h3>
+                    <p><span id="carbon-result">0</span> kg</p>
+                </div>
             </div>
-            <div class="result-item">
-                <h3>💨 Carbon Footprint ($CO_2e$):</h3>
-                <p><span id="carbon-result">0</span> kg</p>
+            
+            <div class="charts-display">
+                <div class="chart-container">
+                    <h3>Water Footprint Breakdown</h3>
+                    <canvas id="waterChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Carbon Footprint Breakdown</h3>
+                    <canvas id="carbonChart"></canvas>
+                </div>
             </div>
         </div>
     </main>
