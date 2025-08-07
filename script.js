@@ -30,31 +30,10 @@ const createDoughnutChart = (canvasId, chartLabel) => { /* ... (function is unch
     return new Chart(ctx, { type: 'doughnut', data: { labels: doughnutChartLabels, datasets: [{ label: chartLabel, data: [0,0,0,0,0], backgroundColor: doughnutChartColors, borderColor: '#ffffff', borderWidth: 2 }] }, options: { responsive: true, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (context) => `${context.label}: ${context.raw.toFixed(1)}` } } } } });
 };
 
-// NEW: Helper function to create line charts
-const createLineChart = (canvasId, yAxisLabel, lineColor) => {
+const createLineChart = (canvasId, yAxisLabel, lineColor) => { /* ... (function is unchanged) ... */
     const ctx = document.getElementById(canvasId).getContext('2d');
-    // Generate labels for the x-axis (1 to 200)
     const lineChartLabels = Array.from({ length: 200 }, (_, i) => i + 1);
-
-    return new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: lineChartLabels,
-            datasets: [{
-                label: yAxisLabel,
-                data: [], // Will be populated dynamically
-                borderColor: lineColor,
-                backgroundColor: lineColor,
-                tension: 0.1,
-                pointRadius: [], // To highlight the selected point
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { x: { title: { display: true, text: 'Number of Washes' } }, y: { title: { display: true, text: yAxisLabel } } }
-        }
-    });
+    return new Chart(ctx, { type: 'line', data: { labels: lineChartLabels, datasets: [{ label: yAxisLabel, data: [], borderColor: lineColor, backgroundColor: lineColor, tension: 0.1, pointRadius: [], }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Number of Washes' } }, y: { title: { display: true, text: yAxisLabel } } } } });
 };
 
 // Create all four charts
@@ -63,9 +42,8 @@ let carbonChart = createDoughnutChart('carbonChart', 'Carbon Footprint (kg CO2e)
 let waterLineChart = createLineChart('waterLineChart', 'Cumulative Water (L)', '#75b3d3');
 let carbonLineChart = createLineChart('carbonLineChart', 'Cumulative Carbon (kg CO2e)', '#ff6361');
 
-
 // --- Main Calculation Function ---
-function calculateAndDisplayLCA() { /* ... (function logic is unchanged) ... */
+function calculateAndDisplayLCA() { /* ... (function is unchanged) ... */
     const material = lcaData.material[materialChoice.value];
     const manufacturing = lcaData.manufacturing[manufacturingChoice.value];
     const distribution = lcaData.distribution[distributionChoice.value];
@@ -79,11 +57,11 @@ function calculateAndDisplayLCA() { /* ... (function logic is unchanged) ... */
     carbonResultEl.innerText = totalCarbon.toFixed(1);
     updateDoughnutCharts(material, manufacturing, distribution, use_phase, end_of_life);
     updateEquivalencies(totalWater, totalCarbon);
-    updateLineCharts(); // NEW: Call the line chart update function
+    updateLineCharts();
 }
 
 // --- Update Functions ---
-function updateDoughnutCharts(material, manufacturing, distribution, use_phase, end_of_life) { /* ... (renamed from updateCharts) ... */
+function updateDoughnutCharts(material, manufacturing, distribution, use_phase, end_of_life) { /* ... (function is unchanged) ... */
     waterChart.data.datasets[0].data = [material.water, manufacturing.water, distribution.water, use_phase.water, end_of_life.water];
     waterChart.update();
     carbonChart.data.datasets[0].data = [material.carbon, manufacturing.carbon, distribution.carbon, use_phase.carbon, end_of_life.carbon];
@@ -97,44 +75,50 @@ function updateEquivalencies(totalWater, totalCarbon) { /* ... (function is unch
     carbonEquivalencyEl.innerText = `💨 Carbon emissions from driving a car for ${milesDriven.toFixed(0)} miles.`;
 }
 
-// NEW: Function to update the line charts
+// UPDATED: This function now calculates the TOTAL cumulative impact
 function updateLineCharts() {
+    // 1. Get the selections for all stages to calculate the fixed, non-use impact
+    const material = lcaData.material[materialChoice.value];
+    const manufacturing = lcaData.manufacturing[manufacturingChoice.value];
+    const distribution = lcaData.distribution[distributionChoice.value];
+    const end_of_life = lcaData.end_of_life[endOfLifeChoice.value];
     const usePhasePerWash = lcaData.use_phase[usePhaseChoice.value];
-    const maxWashes = 200;
-    
-    const cumulativeWaterData = [];
-    const cumulativeCarbonData = [];
 
-    // Generate cumulative data for 200 washes
+    // 2. Calculate the "fixed" impact (the y-intercept) from all non-use stages
+    const fixedWaterImpact = material.water + manufacturing.water + distribution.water + end_of_life.water;
+    const fixedCarbonImpact = material.carbon + manufacturing.carbon + distribution.carbon + end_of_life.carbon;
+
+    const maxWashes = 200;
+    const cumulativeTotalWaterData = [];
+    const cumulativeTotalCarbonData = [];
+
+    // 3. Generate cumulative data, adding the fixed impact to each step of the use phase
     for (let i = 1; i <= maxWashes; i++) {
-        cumulativeWaterData.push(usePhasePerWash.water * i);
-        cumulativeCarbonData.push(usePhasePerWash.carbon * i);
+        cumulativeTotalWaterData.push(fixedWaterImpact + (usePhasePerWash.water * i));
+        cumulativeTotalCarbonData.push(fixedCarbonImpact + (usePhasePerWash.carbon * i));
     }
     
-    // Update the line chart datasets
-    waterLineChart.data.datasets[0].data = cumulativeWaterData;
-    carbonLineChart.data.datasets[0].data = cumulativeCarbonData;
+    // 4. Update the line chart datasets with the new total cumulative data
+    waterLineChart.data.datasets[0].data = cumulativeTotalWaterData;
+    carbonLineChart.data.datasets[0].data = cumulativeTotalCarbonData;
     
-    // Create an array to set the radius of each point on the line chart
+    // 5. Highlight the currently selected point on the slider (this logic is unchanged)
     const currentWashCount = parseInt(washCountSlider.value);
-    const pointRadii = Array(maxWashes).fill(0); // Set all points to be invisible
-    pointRadii[currentWashCount - 1] = 5; // Make the selected point a large, visible circle
+    const pointRadii = Array(maxWashes).fill(0); 
+    pointRadii[currentWashCount - 1] = 5; 
     
-    // Apply the highlight
     waterLineChart.data.datasets[0].pointRadius = pointRadii;
     carbonLineChart.data.datasets[0].pointRadius = pointRadii;
 
-    // Redraw the charts
     waterLineChart.update();
     carbonLineChart.update();
 }
-
 
 // --- Event Listeners ---
 const allChoices = [materialChoice, manufacturingChoice, distributionChoice, usePhaseChoice, endOfLifeChoice];
 allChoices.forEach(choice => choice.addEventListener('change', calculateAndDisplayLCA));
 
-washCountSlider.addEventListener('input', () => {
+washCountSlider.addEventListener('input', () => { /* ... (function is unchanged) ... */
     washCountDisplay.innerText = `${washCountSlider.value} washes`;
     calculateAndDisplayLCA();
 });
@@ -151,7 +135,7 @@ resetButton.addEventListener('click', () => { /* ... (function is unchanged) ...
 });
 
 // --- Initial Calculation on page load ---
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => { /* ... (function is unchanged) ... */
     washCountDisplay.innerText = `${washCountSlider.value} washes`;
     calculateAndDisplayLCA();
 });
