@@ -30,10 +30,45 @@ const createDoughnutChart = (canvasId, chartLabel) => { /* ... (function is unch
     return new Chart(ctx, { type: 'doughnut', data: { labels: doughnutChartLabels, datasets: [{ label: chartLabel, data: [0,0,0,0,0], backgroundColor: doughnutChartColors, borderColor: '#ffffff', borderWidth: 2 }] }, options: { responsive: true, plugins: { legend: { position: 'top' }, tooltip: { callbacks: { label: (context) => `${context.label}: ${context.raw.toFixed(1)}` } } } } });
 };
 
-const createLineChart = (canvasId, yAxisLabel, lineColor) => { /* ... (function is unchanged) ... */
+// UPDATED: The createLineChart function now includes a layout padding property
+const createLineChart = (canvasId, yAxisLabel, lineColor) => {
     const ctx = document.getElementById(canvasId).getContext('2d');
     const lineChartLabels = Array.from({ length: 200 }, (_, i) => i + 1);
-    return new Chart(ctx, { type: 'line', data: { labels: lineChartLabels, datasets: [{ label: yAxisLabel, data: [], borderColor: lineColor, backgroundColor: lineColor, tension: 0.1, pointRadius: [], }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Number of Washes' } }, y: { title: { display: true, text: yAxisLabel } } } } });
+
+    return new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: lineChartLabels,
+            datasets: [{
+                label: yAxisLabel,
+                data: [], 
+                borderColor: lineColor,
+                backgroundColor: lineColor,
+                tension: 0.1,
+                pointRadius: [],
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // Helps with resizing in flex containers
+            plugins: { 
+                legend: { display: false } 
+            },
+            scales: { 
+                x: { title: { display: true, text: 'Number of Washes' } }, 
+                y: { title: { display: true, text: yAxisLabel } } 
+            },
+            // NEW: Add padding to prevent axis titles from being cut off
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 20,
+                    top: 10,
+                    bottom: 10
+                }
+            }
+        }
+    });
 };
 
 // Create all four charts
@@ -75,41 +110,28 @@ function updateEquivalencies(totalWater, totalCarbon) { /* ... (function is unch
     carbonEquivalencyEl.innerText = `💨 Carbon emissions from driving a car for ${milesDriven.toFixed(0)} miles.`;
 }
 
-// UPDATED: This function now calculates the TOTAL cumulative impact
-function updateLineCharts() {
-    // 1. Get the selections for all stages to calculate the fixed, non-use impact
+function updateLineCharts() { /* ... (function is unchanged) ... */
     const material = lcaData.material[materialChoice.value];
     const manufacturing = lcaData.manufacturing[manufacturingChoice.value];
     const distribution = lcaData.distribution[distributionChoice.value];
     const end_of_life = lcaData.end_of_life[endOfLifeChoice.value];
     const usePhasePerWash = lcaData.use_phase[usePhaseChoice.value];
-
-    // 2. Calculate the "fixed" impact (the y-intercept) from all non-use stages
     const fixedWaterImpact = material.water + manufacturing.water + distribution.water + end_of_life.water;
     const fixedCarbonImpact = material.carbon + manufacturing.carbon + distribution.carbon + end_of_life.carbon;
-
     const maxWashes = 200;
     const cumulativeTotalWaterData = [];
     const cumulativeTotalCarbonData = [];
-
-    // 3. Generate cumulative data, adding the fixed impact to each step of the use phase
     for (let i = 1; i <= maxWashes; i++) {
         cumulativeTotalWaterData.push(fixedWaterImpact + (usePhasePerWash.water * i));
         cumulativeTotalCarbonData.push(fixedCarbonImpact + (usePhasePerWash.carbon * i));
     }
-    
-    // 4. Update the line chart datasets with the new total cumulative data
     waterLineChart.data.datasets[0].data = cumulativeTotalWaterData;
     carbonLineChart.data.datasets[0].data = cumulativeTotalCarbonData;
-    
-    // 5. Highlight the currently selected point on the slider (this logic is unchanged)
     const currentWashCount = parseInt(washCountSlider.value);
     const pointRadii = Array(maxWashes).fill(0); 
     pointRadii[currentWashCount - 1] = 5; 
-    
     waterLineChart.data.datasets[0].pointRadius = pointRadii;
     carbonLineChart.data.datasets[0].pointRadius = pointRadii;
-
     waterLineChart.update();
     carbonLineChart.update();
 }
