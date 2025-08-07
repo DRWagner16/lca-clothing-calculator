@@ -50,11 +50,16 @@
 
             <div class="lca-stage">
                 <h2>🚿 4. Use Phase (Washing & Drying)</h2>
-                <p>How will you care for the shirt? (Assuming 50 wash cycles)</p>
+                <p>What's your typical washing method?</p>
                 <select id="use-phase-choice">
                     <option value="hot-machine">Hot Water Wash, Machine Dry</option>
                     <option value="cold-line">Cold Water Wash, Line Dry</option>
                 </select>
+                <p>How many times will you wash it?</p>
+                <div class="slider-container">
+                    <input type="range" id="wash-count-slider" min="1" max="200" value="50">
+                    <span id="wash-count-display">50 washes</span>
+                </div>
             </div>
         </div>
 
