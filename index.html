@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LCA of a Cotton T-Shirt</title>
+    <title>LCA of a T-Shirt</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,25 +16,30 @@
     <main>
         <div class="lca-container">
             <div class="lca-stage">
-                <h2>1. Raw Material Extraction</h2>
-                <p>How was the cotton grown?</p>
+                <h2>🌱 1. Raw Material Extraction</h2>
+                <p>What is the t-shirt made of?</p>
                 <select id="material-choice">
                     <option value="conventional">Conventional Cotton</option>
                     <option value="organic">Organic Cotton</option>
+                    <option value="polyester">Polyester (Synthetic)</option>
+                    <option value="blend">Cotton/Poly Blend</option>
                 </select>
             </div>
 
             <div class="lca-stage">
-                <h2>2. Manufacturing & Dyeing</h2>
+                <h2>🏭 2. Manufacturing & Dyeing</h2>
                 <p>Where was the t-shirt made? (This affects the energy grid's carbon intensity)</p>
                 <select id="manufacturing-choice">
                     <option value="china">China (Coal-heavy Grid)</option>
+                    <option value="usa">USA (Mixed Grid)</option>
+                    <option value="india">India (Coal/Solar Grid)</option>
                     <option value="eu">Europe (Renewable-heavy Grid)</option>
+                    <option value="brazil">Brazil (Hydro-heavy Grid)</option>
                 </select>
             </div>
 
             <div class="lca-stage">
-                <h2>3. Use Phase (Washing & Drying)</h2>
+                <h2>🚿 3. Use Phase (Washing & Drying)</h2>
                 <p>How will you care for the shirt? (Assuming 50 wash cycles)</p>
                 <select id="use-phase-choice">
                     <option value="hot-machine">Hot Water Wash, Machine Dry</option>
