@@ -43,7 +43,7 @@
             
             <div class="lca-stage">
                 <h2>🚚 3. Distribution</h2>
-                <p>How does the shirt get to the store?</p>
+                <p>How does the shirt get from the port to the region?</p>
                 <select id="distribution-choice">
                     <option value="sea">Sea Freight (Slow, Low Carbon)</option>
                     <option value="air">Air Freight (Fast, High Carbon)</option>
@@ -52,7 +52,18 @@
             </div>
 
             <div class="lca-stage">
-                <h2>🚿 4. Use Phase (Washing & Drying)</h2>
+                <h2>📦 4. Last-Mile Delivery</h2>
+                <p>How does it get from the regional hub to the store?</p>
+                <select id="last-mile-choice">
+                    <option value="diesel-truck">Diesel Truck</option>
+                    <option value="electric-van">Electric Van</option>
+                    <option value="cargo-bike">Cargo Bike / Local Pickup</option>
+                </select>
+                <div class="stage-sdg-container" id="last-mile-sdgs"></div>
+            </div>
+
+            <div class="lca-stage">
+                <h2>🚿 5. Use Phase (Washing & Drying)</h2>
                 <p>What's your typical washing method?</p>
                 <select id="use-phase-choice">
                     <option value="hot-machine">Hot Water Wash, Machine Dry</option>
@@ -67,7 +78,7 @@
             </div>
             
             <div class="lca-stage">
-                <h2>♻️ 5. End-of-Life</h2>
+                <h2>♻️ 6. End-of-Life</h2>
                 <p>What happens to the shirt when you're done?</p>
                 <select id="end-of-life-choice">
                     <option value="landfill">Landfill</option>
