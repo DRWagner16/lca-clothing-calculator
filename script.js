@@ -199,8 +199,8 @@ function displayStageSdgs(containerId, sdgNumbers = []) {
 
     sdgNumbers.forEach(sdgNum => {
         const img = document.createElement('img');
-        // CORRECTED: Using the stable, official URL for the SDG icons.
-        img.src = `https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${sdgNum.toString().padStart(2, '0')}.jpg`;
+        const formattedNum = sdgNum.toString().padStart(2, '0');
+        img.src = `https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${formattedNum}.jpg`;
         img.alt = `UN SDG ${sdgNum}: ${sdgTitles[sdgNum] || ''}`;
         img.title = `SDG ${sdgNum}: ${sdgTitles[sdgNum] || ''}`;
         container.appendChild(img);
@@ -209,7 +209,8 @@ function displayStageSdgs(containerId, sdgNumbers = []) {
 
 // --- Event Listeners ---
 const allChoices = [materialChoice, manufacturingChoice, distributionChoice, usePhaseChoice, endOfLifeChoice];
-allChoices.forEach(choice => choice.addEventListener('change', calculateAndDaisplayLCA));
+// CORRECTED: Fixed the typo in the function name below
+allChoices.forEach(choice => choice.addEventListener('change', calculateAndDisplayLCA));
 
 washCountSlider.addEventListener('input', () => {
     washCountDisplay.innerText = `${washCountSlider.value} washes`;
