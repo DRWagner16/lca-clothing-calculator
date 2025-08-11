@@ -220,3 +220,58 @@ input[type="range"] {
 .stage-sdg-container img:hover {
     transform: scale(1.15);
 }
+/* Styles for the new Further Reading section */
+.reading-list-container {
+    max-width: 800px;
+    margin: 2rem auto 0 auto; /* Add margin to the top */
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.reading-list-container h2 {
+    margin-top: 0;
+    color: #005f73;
+    border-bottom: 2px solid #94d2bd;
+    padding-bottom: 0.5rem;
+}
+
+.reading-list-container > p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.reading-list-container ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.reading-list-container li {
+    padding: 1rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.reading-list-container li:last-child {
+    border-bottom: none;
+}
+
+.reading-list-container li a {
+    display: block;
+    font-weight: bold;
+    color: #0a9396;
+    text-decoration: none;
+    margin-bottom: 0.25rem;
+    font-size: 1.1rem;
+}
+
+.reading-list-container li a:hover {
+    text-decoration: underline;
+}
+
+.reading-list-container li span {
+    font-size: 0.95rem;
+    color: #555;
+    line-height: 1.5;
+}
