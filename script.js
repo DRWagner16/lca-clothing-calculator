@@ -1,5 +1,4 @@
 // --- Data for our Life Cycle Assessment ---
-// Includes water, carbon, urban, and sdgs data for each choice
 const lcaData = {
     material: { 
         conventional: { water: 2700, carbon: 5.8, sdgs: [6, 12, 15] },
@@ -19,8 +18,8 @@ const lcaData = {
         air: { water: 10, carbon: 4.5, urban: 'requiring extensive truck traffic to and from airports, causing congestion', sdgs: [9, 11, 13] }
     },
     use_phase: {
-        'hot-machine': { water: 8, carbon: 0.05, sdgs: [6, 7] },
-        'cold-line': { water: 5, carbon: 0.006, sdgs: [6, 7] }
+        'hot-machine': { water: 8, carbon: 0.05, sdgs: [6, 7, 12] },
+        'cold-line': { water: 5, carbon: 0.006, sdgs: [6, 7, 12] }
     },
     end_of_life: {
         landfill: { water: 5, carbon: 1.2, urban: 'significant truck traffic for waste hauling and potential for local ground pollution', sdgs: [11, 12] },
@@ -29,7 +28,7 @@ const lcaData = {
     }
 };
 
-// --- Get references to ALL our HTML elements ---
+// --- Get references to HTML elements ---
 const materialChoice = document.getElementById('material-choice');
 const manufacturingChoice = document.getElementById('manufacturing-choice');
 const distributionChoice = document.getElementById('distribution-choice');
@@ -37,14 +36,12 @@ const usePhaseChoice = document.getElementById('use-phase-choice');
 const washCountSlider = document.getElementById('wash-count-slider');
 const endOfLifeChoice = document.getElementById('end-of-life-choice');
 const resetButton = document.getElementById('reset-button');
-
 const washCountDisplay = document.getElementById('wash-count-display');
 const waterResultEl = document.getElementById('water-result');
 const carbonResultEl = document.getElementById('carbon-result');
 const waterEquivalencyEl = document.getElementById('water-equivalency');
 const carbonEquivalencyEl = document.getElementById('carbon-equivalency');
 const urbanImpactTextEl = document.getElementById('urban-impact-text');
-const sdgContainer = document.getElementById('sdg-container');
 
 // --- Chart Initialization ---
 const doughnutChartLabels = ['Material', 'Manufacturing', 'Distribution', 'Use Phase', 'End-of-Life'];
@@ -121,31 +118,37 @@ let carbonLineChart = createLineChart('carbonLineChart', 'Cumulative Carbon (kg 
 
 // --- Main Calculation Function ---
 function calculateAndDisplayLCA() {
+    // Get selections for each stage
     const material = lcaData.material[materialChoice.value];
     const manufacturing = lcaData.manufacturing[manufacturingChoice.value];
     const distribution = lcaData.distribution[distributionChoice.value];
     const end_of_life = lcaData.end_of_life[endOfLifeChoice.value];
     const usePhasePerWash = lcaData.use_phase[usePhaseChoice.value];
     
+    // Display SDGs for each stage as selections are made
+    displayStageSdgs('material-sdgs', material.sdgs);
+    displayStageSdgs('manufacturing-sdgs', manufacturing.sdgs);
+    displayStageSdgs('distribution-sdgs', distribution.sdgs);
+    displayStageSdgs('use-phase-sdgs', usePhasePerWash.sdgs);
+    displayStageSdgs('end-of-life-sdgs', end_of_life.sdgs);
+    
+    // Calculate totals
     const washCount = parseInt(washCountSlider.value);
     const use_phase = { 
         water: usePhasePerWash.water * washCount, 
         carbon: usePhasePerWash.carbon * washCount,
-        sdgs: usePhasePerWash.sdgs
     };
-    
     const totalWater = material.water + manufacturing.water + distribution.water + use_phase.water + end_of_life.water;
     const totalCarbon = material.carbon + manufacturing.carbon + distribution.carbon + use_phase.carbon + end_of_life.carbon;
 
+    // Update displays
     waterResultEl.innerText = totalWater.toFixed(0);
     carbonResultEl.innerText = totalCarbon.toFixed(1);
     
-    // Call all update functions
     updateDoughnutCharts(material, manufacturing, distribution, use_phase, end_of_life);
     updateEquivalencies(totalWater, totalCarbon);
     updateUrbanImpact(manufacturing, distribution, end_of_life);
     updateLineCharts();
-    updateSDGDisplay([material, manufacturing, distribution, use_phase, end_of_life]);
 }
 
 // --- Update Functions ---
@@ -165,7 +168,6 @@ function updateEquivalencies(totalWater, totalCarbon) {
 
 function updateUrbanImpact(manufacturing, distribution, end_of_life) {
     const impactText = `This scenario involves ${manufacturing.urban}, while distribution is ${distribution.urban}. Finally, its disposal results in ${end_of_life.urban}.`;
-    
     urbanImpactTextEl.innerText = impactText;
 }
 
@@ -175,50 +177,41 @@ function updateLineCharts() {
     const distribution = lcaData.distribution[distributionChoice.value];
     const end_of_life = lcaData.end_of_life[endOfLifeChoice.value];
     const usePhasePerWash = lcaData.use_phase[usePhaseChoice.value];
-
     const fixedWaterImpact = material.water + manufacturing.water + distribution.water + end_of_life.water;
     const fixedCarbonImpact = material.carbon + manufacturing.carbon + distribution.carbon + end_of_life.carbon;
-
     const maxWashes = 200;
     const cumulativeTotalWaterData = [];
     const cumulativeTotalCarbonData = [];
-
     for (let i = 1; i <= maxWashes; i++) {
         cumulativeTotalWaterData.push(fixedWaterImpact + (usePhasePerWash.water * i));
         cumulativeTotalCarbonData.push(fixedCarbonImpact + (usePhasePerWash.carbon * i));
     }
-    
     waterLineChart.data.datasets[0].data = cumulativeTotalWaterData;
     carbonLineChart.data.datasets[0].data = cumulativeTotalCarbonData;
-    
     const currentWashCount = parseInt(washCountSlider.value);
     const pointRadii = Array(maxWashes).fill(0); 
     pointRadii[currentWashCount - 1] = 5; 
-    
     waterLineChart.data.datasets[0].pointRadius = pointRadii;
     carbonLineChart.data.datasets[0].pointRadius = pointRadii;
-
     waterLineChart.update();
     carbonLineChart.update();
 }
 
-function updateSDGDisplay(selections) {
-    const allSdgs = selections.flatMap(choice => choice.sdgs || []);
-    const uniqueSdgs = [...new Set(allSdgs)].sort((a, b) => a - b);
-    
-    sdgContainer.innerHTML = '';
-    
-    const sdgTitles = { 3: 'Good Health and Well-being', 6: 'Clean Water and Sanitation', 7: 'Affordable and Clean Energy', 8: 'Decent Work and Economic Growth', 9: 'Industry, Innovation and Infrastructure', 11: 'Sustainable Cities and Communities', 12: 'Responsible Consumption and Production', 13: 'Climate Action', 14: 'Life Below Water', 15: 'Life on Land' };
-    
-    uniqueSdgs.forEach(sdgNum => {
+const sdgTitles = { 3: 'Good Health and Well-being', 6: 'Clean Water and Sanitation', 7: 'Affordable and Clean Energy', 8: 'Decent Work and Economic Growth', 9: 'Industry, Innovation and Infrastructure', 11: 'Sustainable Cities and Communities', 12: 'Responsible Consumption and Production', 13: 'Climate Action', 14: 'Life Below Water', 15: 'Life on Land' };
+
+function displayStageSdgs(containerId, sdgNumbers = []) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ''; 
+
+    sdgNumbers.forEach(sdgNum => {
         const img = document.createElement('img');
-        img.src = `https://www.un.org/sustainabledevelopment/wp-content/uploads/2019/01/E-SDG-goals-icons-full-color-square-${sdgNum}.png`;
+        const formattedNum = sdgNum.toString().padStart(2, '0');
+        img.src = `https://www.un.org/sustainabledevelopment/wp-content/uploads/2023/09/E-WEB-Goal-${formattedNum}.png`;
         img.alt = `UN SDG ${sdgNum}: ${sdgTitles[sdgNum] || ''}`;
         img.title = `SDG ${sdgNum}: ${sdgTitles[sdgNum] || ''}`;
-        sdgContainer.appendChild(img);
+        container.appendChild(img);
     });
 }
-
 
 // --- Event Listeners ---
 const allChoices = [materialChoice, manufacturingChoice, distributionChoice, usePhaseChoice, endOfLifeChoice];
