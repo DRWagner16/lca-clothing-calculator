@@ -109,30 +109,25 @@ const createLineChart = (canvasId, yAxisLabel, lineColor) => {
     });
 };
 
-// Create all four charts
 let waterChart = createDoughnutChart('waterChart', 'Water Usage (L)');
 let carbonChart = createDoughnutChart('carbonChart', 'Carbon Footprint (kg CO2e)');
 let waterLineChart = createLineChart('waterLineChart', 'Cumulative Water (L)', '#75b3d3');
 let carbonLineChart = createLineChart('carbonLineChart', 'Cumulative Carbon (kg CO2e)', '#ff6361');
 
-
 // --- Main Calculation Function ---
 function calculateAndDisplayLCA() {
-    // Get selections for each stage
     const material = lcaData.material[materialChoice.value];
     const manufacturing = lcaData.manufacturing[manufacturingChoice.value];
     const distribution = lcaData.distribution[distributionChoice.value];
     const end_of_life = lcaData.end_of_life[endOfLifeChoice.value];
     const usePhasePerWash = lcaData.use_phase[usePhaseChoice.value];
     
-    // Display SDGs for each stage as selections are made
     displayStageSdgs('material-sdgs', material.sdgs);
     displayStageSdgs('manufacturing-sdgs', manufacturing.sdgs);
     displayStageSdgs('distribution-sdgs', distribution.sdgs);
     displayStageSdgs('use-phase-sdgs', usePhasePerWash.sdgs);
     displayStageSdgs('end-of-life-sdgs', end_of_life.sdgs);
     
-    // Calculate totals
     const washCount = parseInt(washCountSlider.value);
     const use_phase = { 
         water: usePhasePerWash.water * washCount, 
@@ -141,7 +136,6 @@ function calculateAndDisplayLCA() {
     const totalWater = material.water + manufacturing.water + distribution.water + use_phase.water + end_of_life.water;
     const totalCarbon = material.carbon + manufacturing.carbon + distribution.carbon + use_phase.carbon + end_of_life.carbon;
 
-    // Update displays
     waterResultEl.innerText = totalWater.toFixed(0);
     carbonResultEl.innerText = totalCarbon.toFixed(1);
     
@@ -205,8 +199,8 @@ function displayStageSdgs(containerId, sdgNumbers = []) {
 
     sdgNumbers.forEach(sdgNum => {
         const img = document.createElement('img');
-        const formattedNum = sdgNum.toString().padStart(2, '0');
-        img.src = `https://www.un.org/sustainabledevelopment/wp-content/uploads/2023/09/E-WEB-Goal-${formattedNum}.png`;
+        // CORRECTED: Using the stable, official URL for the SDG icons.
+        img.src = `https://sdgs.un.org/sites/default/files/goals/E_SDG_Icons-${sdgNum.toString().padStart(2, '0')}.jpg`;
         img.alt = `UN SDG ${sdgNum}: ${sdgTitles[sdgNum] || ''}`;
         img.title = `SDG ${sdgNum}: ${sdgTitles[sdgNum] || ''}`;
         container.appendChild(img);
@@ -215,7 +209,7 @@ function displayStageSdgs(containerId, sdgNumbers = []) {
 
 // --- Event Listeners ---
 const allChoices = [materialChoice, manufacturingChoice, distributionChoice, usePhaseChoice, endOfLifeChoice];
-allChoices.forEach(choice => choice.addEventListener('change', calculateAndDisplayLCA));
+allChoices.forEach(choice => choice.addEventListener('change', calculateAndDaisplayLCA));
 
 washCountSlider.addEventListener('input', () => {
     washCountDisplay.innerText = `${washCountSlider.value} washes`;
