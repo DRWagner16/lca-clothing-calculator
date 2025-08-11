@@ -275,3 +275,25 @@ input[type="range"] {
     color: #555;
     line-height: 1.5;
 }
+/* Styles for the new SDG Summary section */
+.sdg-summary-container {
+    background-color: #fff7e6;
+    border: 1px solid #ffd591;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1.5rem;
+}
+
+.sdg-summary-container h3 {
+    margin-top: 0;
+    text-align: center;
+    color: #d46b08;
+}
+
+.sdg-summary-container p {
+    margin: 0.5rem 0 0 0;
+    font-size: 1rem;
+    color: #59431d;
+    line-height: 1.6;
+    text-align: left;
+}
