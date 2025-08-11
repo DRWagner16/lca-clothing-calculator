@@ -297,3 +297,22 @@ input[type="range"] {
     line-height: 1.6;
     text-align: left;
 }
+/* Styles for the new Stakeholder section */
+.stakeholder-container {
+    background-color: #f0f5ff;
+    border: 1px solid #adc6ff;
+    border-radius: 8px;
+    padding: 1rem 1rem 1.5rem 1rem;
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.stakeholder-container h3 {
+    margin-top: 0;
+    color: #1d39c4;
+}
+
+.stakeholder-container .chart-container {
+    max-height: 350px;
+    margin-top: 1rem;
+}
