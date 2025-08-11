@@ -1,31 +1,31 @@
 // --- Data for our Life Cycle Assessment ---
-// Includes 'urban' key with descriptive text for relevant stages
+// Includes water, carbon, urban, and sdgs data for each choice
 const lcaData = {
     material: { 
-        conventional: { water: 2700, carbon: 5.8 },
-        organic: { water: 950, carbon: 3.2 },
-        polyester: { water: 50, carbon: 8.5 },
-        blend: { water: 1400, carbon: 7.2 }
+        conventional: { water: 2700, carbon: 5.8, sdgs: [6, 12, 15] },
+        organic: { water: 950, carbon: 3.2, sdgs: [3, 6, 12, 15] },
+        polyester: { water: 50, carbon: 8.5, sdgs: [7, 12, 13, 14] },
+        blend: { water: 1400, carbon: 7.2, sdgs: [6, 7, 12, 15] }
     },
     manufacturing: {
-        china: { water: 150, carbon: 3.1, urban: 'high local air pollution from concentrated industrial activity' },
-        usa: { water: 120, carbon: 2.0, urban: 'moderate local air pollution due to mixed industrial and regulatory standards' },
-        india: { water: 160, carbon: 2.9, urban: 'high local air and water pollution from dense industrial zones' },
-        eu: { water: 100, carbon: 1.5, urban: 'lower local air pollution due to stricter environmental regulations' },
-        brazil: { water: 90, carbon: 0.8, urban: 'lower local air pollution, with primary impacts on land use from hydropower' }
+        china: { water: 150, carbon: 3.1, urban: 'high local air pollution from concentrated industrial activity', sdgs: [8, 9, 11] },
+        usa: { water: 120, carbon: 2.0, urban: 'moderate local air pollution due to mixed industrial and regulatory standards', sdgs: [8, 9] },
+        india: { water: 160, carbon: 2.9, urban: 'high local air and water pollution from dense industrial zones', sdgs: [8, 9, 11] },
+        eu: { water: 100, carbon: 1.5, urban: 'lower local air pollution due to stricter environmental regulations', sdgs: [8, 9, 12] },
+        brazil: { water: 90, carbon: 0.8, urban: 'lower local air pollution, with primary impacts on land use from hydropower', sdgs: [7, 8, 9] }
     },
     distribution: { 
-        sea: { water: 5, carbon: 0.2, urban: 'contributing to significant port traffic and related emissions' },
-        air: { water: 10, carbon: 4.5, urban: 'requiring extensive truck traffic to and from airports, causing congestion' }
+        sea: { water: 5, carbon: 0.2, urban: 'contributing to significant port traffic and related emissions', sdgs: [9, 11, 14] },
+        air: { water: 10, carbon: 4.5, urban: 'requiring extensive truck traffic to and from airports, causing congestion', sdgs: [9, 11, 13] }
     },
     use_phase: {
-        'hot-machine': { water: 8, carbon: 0.05 },
-        'cold-line': { water: 5, carbon: 0.006 }
+        'hot-machine': { water: 8, carbon: 0.05, sdgs: [6, 7] },
+        'cold-line': { water: 5, carbon: 0.006, sdgs: [6, 7] }
     },
     end_of_life: {
-        landfill: { water: 5, carbon: 1.2, urban: 'significant truck traffic for waste hauling and potential for local ground pollution' },
-        recycle: { water: 50, carbon: -0.5, urban: 'moderate collection traffic but helps reduce the need for new industrial facilities' },
-        incinerate: { water: 5, carbon: 2.8, urban: 'high truck traffic and the release of airborne particulates that affect local air quality' }
+        landfill: { water: 5, carbon: 1.2, urban: 'significant truck traffic for waste hauling and potential for local ground pollution', sdgs: [11, 12] },
+        recycle: { water: 50, carbon: -0.5, urban: 'moderate collection traffic but helps reduce the need for new industrial facilities', sdgs: [9, 11, 12] },
+        incinerate: { water: 5, carbon: 2.8, urban: 'high truck traffic and the release of airborne particulates that affect local air quality', sdgs: [3, 11, 12] }
     }
 };
 
@@ -44,6 +44,7 @@ const carbonResultEl = document.getElementById('carbon-result');
 const waterEquivalencyEl = document.getElementById('water-equivalency');
 const carbonEquivalencyEl = document.getElementById('carbon-equivalency');
 const urbanImpactTextEl = document.getElementById('urban-impact-text');
+const sdgContainer = document.getElementById('sdg-container');
 
 // --- Chart Initialization ---
 const doughnutChartLabels = ['Material', 'Manufacturing', 'Distribution', 'Use Phase', 'End-of-Life'];
@@ -124,19 +125,27 @@ function calculateAndDisplayLCA() {
     const manufacturing = lcaData.manufacturing[manufacturingChoice.value];
     const distribution = lcaData.distribution[distributionChoice.value];
     const end_of_life = lcaData.end_of_life[endOfLifeChoice.value];
-    const washCount = parseInt(washCountSlider.value);
     const usePhasePerWash = lcaData.use_phase[usePhaseChoice.value];
-    const use_phase = { water: usePhasePerWash.water * washCount, carbon: usePhasePerWash.carbon * washCount };
+    
+    const washCount = parseInt(washCountSlider.value);
+    const use_phase = { 
+        water: usePhasePerWash.water * washCount, 
+        carbon: usePhasePerWash.carbon * washCount,
+        sdgs: usePhasePerWash.sdgs
+    };
+    
     const totalWater = material.water + manufacturing.water + distribution.water + use_phase.water + end_of_life.water;
     const totalCarbon = material.carbon + manufacturing.carbon + distribution.carbon + use_phase.carbon + end_of_life.carbon;
 
     waterResultEl.innerText = totalWater.toFixed(0);
     carbonResultEl.innerText = totalCarbon.toFixed(1);
     
+    // Call all update functions
     updateDoughnutCharts(material, manufacturing, distribution, use_phase, end_of_life);
     updateEquivalencies(totalWater, totalCarbon);
     updateUrbanImpact(manufacturing, distribution, end_of_life);
     updateLineCharts();
+    updateSDGDisplay([material, manufacturing, distribution, use_phase, end_of_life]);
 }
 
 // --- Update Functions ---
@@ -191,6 +200,23 @@ function updateLineCharts() {
 
     waterLineChart.update();
     carbonLineChart.update();
+}
+
+function updateSDGDisplay(selections) {
+    const allSdgs = selections.flatMap(choice => choice.sdgs || []);
+    const uniqueSdgs = [...new Set(allSdgs)].sort((a, b) => a - b);
+    
+    sdgContainer.innerHTML = '';
+    
+    const sdgTitles = { 3: 'Good Health and Well-being', 6: 'Clean Water and Sanitation', 7: 'Affordable and Clean Energy', 8: 'Decent Work and Economic Growth', 9: 'Industry, Innovation and Infrastructure', 11: 'Sustainable Cities and Communities', 12: 'Responsible Consumption and Production', 13: 'Climate Action', 14: 'Life Below Water', 15: 'Life on Land' };
+    
+    uniqueSdgs.forEach(sdgNum => {
+        const img = document.createElement('img');
+        img.src = `https://www.un.org/sustainabledevelopment/wp-content/uploads/2019/01/E-SDG-goals-icons-full-color-square-${sdgNum}.png`;
+        img.alt = `UN SDG ${sdgNum}: ${sdgTitles[sdgNum] || ''}`;
+        img.title = `SDG ${sdgNum}: ${sdgTitles[sdgNum] || ''}`;
+        sdgContainer.appendChild(img);
+    });
 }
 
 
