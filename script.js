@@ -1,5 +1,4 @@
 // --- Data for our Life Cycle Assessment ---
-// UPDATED: Added a new 'stakeholders' object with impact scores (-2 to +2)
 const lcaData = {
     material: { 
         conventional: { water: 2700, carbon: 5.8, sdgs: [6, 12, 15], stakeholders: { 'Workers': -1, 'Community': -2, 'Environment': -2, 'Consumer': 1, 'Company': 2 } },
@@ -64,7 +63,43 @@ const createDoughnutChart = (canvasId, chartLabel) => {
 const createLineChart = (canvasId, yAxisLabel, lineColor) => {
     const ctx = document.getElementById(canvasId).getContext('2d');
     const lineChartLabels = Array.from({ length: 200 }, (_, i) => i + 1);
-    return new Chart(ctx, { type: 'line', data: { labels: lineChartLabels, datasets: [{ label: yAxisLabel, data: [], borderColor: lineColor, backgroundColor: lineColor, tension: 0.1, pointRadius: [] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Number of Washes' } }, y: { title: { display: true, text: yAxisLabel } } }, layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } } } });
+    return new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: lineChartLabels,
+            datasets: [{
+                label: yAxisLabel,
+                data: [], 
+                borderColor: lineColor,
+                backgroundColor: lineColor,
+                tension: 0.1,
+                pointRadius: [],
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { 
+                legend: { display: false } 
+            },
+            scales: { 
+                x: { title: { display: true, text: 'Number of Washes' } }, 
+                // UPDATED: Added a 'ticks' object to the y-axis to improve readability
+                y: { 
+                    title: { display: true, text: yAxisLabel },
+                    ticks: { maxTicksLimit: 6 } // Limits the number of labels to prevent overlap
+                } 
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 20,
+                    top: 10,
+                    bottom: 10
+                }
+            }
+        }
+    });
 };
 
 const createStakeholderChart = () => {
@@ -154,7 +189,7 @@ function updateEquivalencies(totalWater, totalCarbon) {
 }
 
 function updateUrbanImpact(manufacturing, distribution, last_mile, end_of_life) {
-    const impactText = `This scenario involves ${manufacturing.urban}, while long-haul distribution contributes to ${distribution.urban}. Final delivery via ${last_mile.urban}, and its disposal results in ${end_of_life.urban}.`;
+    const impactText = `This scenario involves ${manufacturing.urban}. Long-haul distribution contributes to ${distribution.urban}, while final delivery via ${last_mile.urban}. Finally, its disposal results in ${end_of_life.urban}.`;
     urbanImpactTextEl.innerText = impactText;
 }
 
@@ -236,7 +271,6 @@ function updateStakeholderChart(selections) {
     stakeholderChart.data.datasets[0].data = stakeholderLabels.map(label => finalScores[label]);
     stakeholderChart.update();
 }
-
 
 // --- Event Listeners ---
 const allChoices = [materialChoice, manufacturingChoice, distributionChoice, lastMileChoice, usePhaseChoice, endOfLifeChoice];
