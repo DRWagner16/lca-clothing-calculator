@@ -177,3 +177,24 @@ input[type="range"] {
     border-top: 2px solid #e0e0e0;
     text-align: center;
 }
+/* Styles for the new urban impact section */
+.urban-impact-container {
+    background-color: #e6f7ff;
+    border: 1px solid #91d5ff;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.urban-impact-container h3 {
+    margin-top: 0;
+    color: #0050b3;
+}
+
+.urban-impact-container p {
+    margin: 0.5rem 0 0 0;
+    font-size: 1.1rem;
+    color: #1d39c4;
+    line-height: 1.5;
+}
