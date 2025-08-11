@@ -25,6 +25,7 @@
                     <option value="polyester">Polyester (Synthetic)</option>
                     <option value="blend">Cotton/Poly Blend</option>
                 </select>
+                <div class="stage-sdg-container" id="material-sdgs"></div>
             </div>
 
             <div class="lca-stage">
@@ -37,6 +38,7 @@
                     <option value="eu">Europe (Renewable-heavy Grid)</option>
                     <option value="brazil">Brazil (Hydro-heavy Grid)</option>
                 </select>
+                <div class="stage-sdg-container" id="manufacturing-sdgs"></div>
             </div>
             
             <div class="lca-stage">
@@ -46,6 +48,7 @@
                     <option value="sea">Sea Freight (Slow, Low Carbon)</option>
                     <option value="air">Air Freight (Fast, High Carbon)</option>
                 </select>
+                <div class="stage-sdg-container" id="distribution-sdgs"></div>
             </div>
 
             <div class="lca-stage">
@@ -60,6 +63,7 @@
                     <input type="range" id="wash-count-slider" min="1" max="200" value="50">
                     <span id="wash-count-display">50 washes</span>
                 </div>
+                <div class="stage-sdg-container" id="use-phase-sdgs"></div>
             </div>
             
             <div class="lca-stage">
@@ -70,9 +74,10 @@
                     <option value="recycle">Recycle</option>
                     <option value="incinerate">Incinerate for Energy</option>
                 </select>
+                <div class="stage-sdg-container" id="end-of-life-sdgs"></div>
             </div>
         </div>
-
+        
         <div class="results-container">
             <button id="reset-button">🔄 Reset to Defaults</button>
             
