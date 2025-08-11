@@ -1,35 +1,36 @@
 // --- Data for our Life Cycle Assessment ---
+// UPDATED: Added a new 'stakeholders' object with impact scores (-2 to +2)
 const lcaData = {
     material: { 
-        conventional: { water: 2700, carbon: 5.8, sdgs: [6, 12, 15] },
-        organic: { water: 950, carbon: 3.2, sdgs: [3, 6, 12, 15] },
-        polyester: { water: 50, carbon: 8.5, sdgs: [7, 12, 13, 14] },
-        blend: { water: 1400, carbon: 7.2, sdgs: [6, 7, 12, 15] }
+        conventional: { water: 2700, carbon: 5.8, sdgs: [6, 12, 15], stakeholders: { 'Workers': -1, 'Community': -2, 'Environment': -2, 'Consumer': 1, 'Company': 2 } },
+        organic: { water: 950, carbon: 3.2, sdgs: [3, 6, 12, 15], stakeholders: { 'Workers': 2, 'Community': 1, 'Environment': 2, 'Consumer': 0, 'Company': -1 } },
+        polyester: { water: 50, carbon: 8.5, sdgs: [7, 12, 13, 14], stakeholders: { 'Workers': 0, 'Community': -1, 'Environment': -2, 'Consumer': 1, 'Company': 1 } },
+        blend: { water: 1400, carbon: 7.2, sdgs: [6, 7, 12, 15], stakeholders: { 'Workers': -1, 'Community': -1, 'Environment': -2, 'Consumer': 1, 'Company': 1 } }
     },
     manufacturing: {
-        china: { water: 150, carbon: 3.1, urban: 'high local air pollution from concentrated industrial activity', sdgs: [8, 9, 11] },
-        usa: { water: 120, carbon: 2.0, urban: 'moderate local air pollution due to mixed industrial and regulatory standards', sdgs: [8, 9] },
-        india: { water: 160, carbon: 2.9, urban: 'high local air and water pollution from dense industrial zones', sdgs: [8, 9, 11] },
-        eu: { water: 100, carbon: 1.5, urban: 'lower local air pollution due to stricter environmental regulations', sdgs: [8, 9, 12] },
-        brazil: { water: 90, carbon: 0.8, urban: 'lower local air pollution, with primary impacts on land use from hydropower', sdgs: [7, 8, 9] }
+        china: { water: 150, carbon: 3.1, urban: 'high local air pollution from concentrated industrial activity', sdgs: [8, 9, 11], stakeholders: { 'Workers': -1, 'Community': -2, 'Environment': -1, 'Consumer': 1, 'Company': 2 } },
+        usa: { water: 120, carbon: 2.0, urban: 'moderate local air pollution due to mixed industrial and regulatory standards', sdgs: [8, 9], stakeholders: { 'Workers': 1, 'Community': 0, 'Environment': 0, 'Consumer': -1, 'Company': 0 } },
+        india: { water: 160, carbon: 2.9, urban: 'high local air and water pollution from dense industrial zones', sdgs: [8, 9, 11], stakeholders: { 'Workers': -2, 'Community': -2, 'Environment': -1, 'Consumer': 1, 'Company': 2 } },
+        eu: { water: 100, carbon: 1.5, urban: 'lower local air pollution due to stricter environmental regulations', sdgs: [8, 9, 12], stakeholders: { 'Workers': 2, 'Community': 1, 'Environment': 1, 'Consumer': -2, 'Company': -1 } },
+        brazil: { water: 90, carbon: 0.8, urban: 'lower local air pollution, with primary impacts on land use from hydropower', sdgs: [7, 8, 9], stakeholders: { 'Workers': 0, 'Community': 1, 'Environment': 0, 'Consumer': 0, 'Company': 0 } }
     },
     distribution: { 
-        sea: { water: 5, carbon: 0.2, urban: 'contributing to significant port traffic and related emissions', sdgs: [9, 11, 14] },
-        air: { water: 10, carbon: 4.5, urban: 'requiring extensive truck traffic to and from airports, causing congestion', sdgs: [9, 11, 13] }
+        sea: { water: 5, carbon: 0.2, urban: 'contributing to significant port traffic and related emissions', sdgs: [9, 11, 14], stakeholders: { 'Workers': 0, 'Community': -1, 'Environment': 0, 'Consumer': 0, 'Company': 1 } },
+        air: { water: 10, carbon: 4.5, urban: 'requiring extensive truck traffic to and from airports, causing congestion', sdgs: [9, 11, 13], stakeholders: { 'Workers': 0, 'Community': -1, 'Environment': -2, 'Consumer': 1, 'Company': -1 } }
     },
     last_mile: {
-        'diesel-truck': { water: 2, carbon: 0.8, urban: 'significant local air pollution (particulates, NOx) and noise from diesel trucks', sdgs: [3, 11] },
-        'electric-van': { water: 1, carbon: 0.1, urban: 'reduced local air pollution and noise from electric vans', sdgs: [3, 7, 11] },
-        'cargo-bike': { water: 0, carbon: 0.01, urban: 'no local emissions and reduced traffic congestion from cargo bikes', sdgs: [3, 11, 13] }
+        'diesel-truck': { water: 2, carbon: 0.8, urban: 'significant local air pollution (particulates, NOx) and noise from diesel trucks', sdgs: [3, 11], stakeholders: { 'Workers': 0, 'Community': -2, 'Environment': -1, 'Consumer': 0, 'Company': 0 } },
+        'electric-van': { water: 1, carbon: 0.1, urban: 'reduced local air pollution and noise from electric vans', sdgs: [3, 7, 11], stakeholders: { 'Workers': 0, 'Community': 1, 'Environment': 1, 'Consumer': 0, 'Company': 0 } },
+        'cargo-bike': { water: 0, carbon: 0.01, urban: 'no local emissions and reduced traffic congestion from cargo bikes', sdgs: [3, 11, 13], stakeholders: { 'Workers': 1, 'Community': 2, 'Environment': 2, 'Consumer': -1, 'Company': -1 } }
     },
     use_phase: {
-        'hot-machine': { water: 8, carbon: 0.05, sdgs: [6, 7, 12] },
-        'cold-line': { water: 5, carbon: 0.006, sdgs: [6, 7, 12] }
+        'hot-machine': { water: 8, carbon: 0.05, sdgs: [6, 7, 12], stakeholders: { 'Workers': 0, 'Community': 0, 'Environment': -1, 'Consumer': -1, 'Company': 0 } },
+        'cold-line': { water: 5, carbon: 0.006, sdgs: [6, 7, 12], stakeholders: { 'Workers': 0, 'Community': 0, 'Environment': 1, 'Consumer': 1, 'Company': 0 } }
     },
     end_of_life: {
-        landfill: { water: 5, carbon: 1.2, urban: 'significant truck traffic for waste hauling and potential for local ground pollution', sdgs: [11, 12] },
-        recycle: { water: 50, carbon: -0.5, urban: 'moderate collection traffic but helps reduce the need for new industrial facilities', sdgs: [9, 11, 12] },
-        incinerate: { water: 5, carbon: 2.8, urban: 'high truck traffic and the release of airborne particulates that affect local air quality', sdgs: [3, 11, 12] }
+        landfill: { water: 5, carbon: 1.2, urban: 'significant truck traffic for waste hauling and potential for local ground pollution', sdgs: [11, 12], stakeholders: { 'Workers': 0, 'Community': -1, 'Environment': -2, 'Consumer': 0, 'Company': 0 } },
+        recycle: { water: 50, carbon: -0.5, urban: 'moderate collection traffic but helps reduce the need for new industrial facilities', sdgs: [9, 11, 12], stakeholders: { 'Workers': 1, 'Community': 1, 'Environment': 2, 'Consumer': 0, 'Company': 0 } },
+        incinerate: { water: 5, carbon: 2.8, urban: 'high truck traffic and the release of airborne particulates that affect local air quality', sdgs: [3, 11, 12], stakeholders: { 'Workers': 0, 'Community': -2, 'Environment': -1, 'Consumer': 0, 'Company': 1 } }
     }
 };
 
@@ -48,11 +49,12 @@ const carbonResultEl = document.getElementById('carbon-result');
 const waterEquivalencyEl = document.getElementById('water-equivalency');
 const carbonEquivalencyEl = document.getElementById('carbon-equivalency');
 const urbanImpactTextEl = document.getElementById('urban-impact-text');
-const sdgSummaryTextEl = document.getElementById('sdg-summary-text'); // New
+const sdgSummaryTextEl = document.getElementById('sdg-summary-text');
 
 // --- Chart Initialization ---
 const doughnutChartLabels = ['Material', 'Manufacturing', 'Distribution', 'Last-Mile', 'Use Phase', 'End-of-Life'];
 const doughnutChartColors = ['#003f5c', '#444e86', '#955196', '#dd5182', '#ff6e54', '#ffa600'];
+const stakeholderLabels = ['Workers', 'Community', 'Environment', 'Consumer', 'Company'];
 
 const createDoughnutChart = (canvasId, chartLabel) => {
     const ctx = document.getElementById(canvasId).getContext('2d');
@@ -65,11 +67,38 @@ const createLineChart = (canvasId, yAxisLabel, lineColor) => {
     return new Chart(ctx, { type: 'line', data: { labels: lineChartLabels, datasets: [{ label: yAxisLabel, data: [], borderColor: lineColor, backgroundColor: lineColor, tension: 0.1, pointRadius: [] }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { title: { display: true, text: 'Number of Washes' } }, y: { title: { display: true, text: yAxisLabel } } }, layout: { padding: { left: 10, right: 20, top: 10, bottom: 10 } } } });
 };
 
+const createStakeholderChart = () => {
+    const ctx = document.getElementById('stakeholderChart').getContext('2d');
+    return new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: stakeholderLabels,
+            datasets: [{
+                label: 'Overall Stakeholder Impact',
+                data: [0, 0, 0, 0, 0],
+                fill: true,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgb(54, 162, 235)',
+                pointBackgroundColor: 'rgb(54, 162, 235)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(54, 162, 235)'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            elements: { line: { tension: 0, borderWidth: 2 } },
+            scales: { r: { suggestedMin: -8, suggestedMax: 8, pointLabels: { font: { size: 13 } }, ticks: { stepSize: 4 } } }
+        }
+    });
+};
+
 let waterChart = createDoughnutChart('waterChart', 'Water Usage (L)');
 let carbonChart = createDoughnutChart('carbonChart', 'Carbon Footprint (kg CO₂e)');
 let waterLineChart = createLineChart('waterLineChart', 'Cumulative Water (L)', '#75b3d3');
 let carbonLineChart = createLineChart('carbonLineChart', 'Cumulative Carbon (kg CO₂e)', '#ff6361');
-
+let stakeholderChart = createStakeholderChart();
 
 // --- Main Calculation Function ---
 function calculateAndDisplayLCA() {
@@ -91,20 +120,22 @@ function calculateAndDisplayLCA() {
     const use_phase = { 
         water: usePhasePerWash.water * washCount, 
         carbon: usePhasePerWash.carbon * washCount,
+        stakeholders: Object.fromEntries(Object.entries(usePhasePerWash.stakeholders).map(([key, value]) => [key, value * (washCount / 50)]))
     };
+    
     const totalWater = material.water + manufacturing.water + distribution.water + last_mile.water + use_phase.water + end_of_life.water;
     const totalCarbon = material.carbon + manufacturing.carbon + distribution.carbon + last_mile.carbon + use_phase.carbon + end_of_life.carbon;
 
     waterResultEl.innerText = totalWater.toFixed(0);
     carbonResultEl.innerText = totalCarbon.toFixed(1);
     
-    // Call all update functions
     const allSelections = [material, manufacturing, distribution, last_mile, use_phase, end_of_life];
     updateDoughnutCharts(...allSelections);
     updateEquivalencies(totalWater, totalCarbon);
     updateUrbanImpact(manufacturing, distribution, last_mile, end_of_life);
     updateLineCharts();
-    updateSdgSummary(allSelections, {water: totalWater, carbon: totalCarbon}); // New
+    updateSdgSummary(allSelections, {water: totalWater, carbon: totalCarbon});
+    updateStakeholderChart(allSelections);
 }
 
 // --- Update Functions ---
@@ -123,7 +154,7 @@ function updateEquivalencies(totalWater, totalCarbon) {
 }
 
 function updateUrbanImpact(manufacturing, distribution, last_mile, end_of_life) {
-    const impactText = `This scenario involves ${manufacturing.urban}. Long-haul distribution contributes to ${distribution.urban}, while final delivery causes ${last_mile.urban}. Finally, its disposal results in ${end_of_life.urban}.`;
+    const impactText = `This scenario involves ${manufacturing.urban}, while long-haul distribution contributes to ${distribution.urban}. Final delivery via ${last_mile.urban}, and its disposal results in ${end_of_life.urban}.`;
     urbanImpactTextEl.innerText = impactText;
 }
 
@@ -168,12 +199,9 @@ function displayStageSdgs(containerId, sdgNumbers = []) {
     });
 }
 
-// NEW: Function to create a text summary of the SDG connections
 function updateSdgSummary(selections, totals) {
     const uniqueSdgs = [...new Set(selections.flatMap(choice => choice.sdgs || []))];
     let summaryParts = [];
-
-    // Add narrative parts based on key SDG connections
     if (uniqueSdgs.includes(12)) {
         const washCount = parseInt(washCountSlider.value);
         const phrase = washCount > 125 ? "Maximizing the garment's utility" : "Extending the garment's life";
@@ -186,17 +214,27 @@ function updateSdgSummary(selections, totals) {
         summaryParts.push(`A high carbon footprint has direct consequences for <strong>SDG 13 (Climate Action)</strong>.`);
     }
     if (uniqueSdgs.includes(3) || uniqueSdgs.includes(11)) {
-        const lastMileChoice = selections[3]; // last_mile is the 4th selection
+        const lastMileChoice = selections[3];
         if(lastMileChoice.urban.includes('significant')) {
-            summaryParts.push(`Local delivery and disposal choices impact urban air quality, linking to <strong>SDG 3 (Good Health)</strong> and <strong>SDG 11 (Sustainable Cities)</strong>.`);
+            summaryParts.push(`Delivery and disposal choices impact urban air quality, linking to <strong>SDG 3 (Good Health)</strong> and <strong>SDG 11 (Sustainable Cities)</strong>.`);
         }
     }
-
     if (summaryParts.length > 0) {
         sdgSummaryTextEl.innerHTML = summaryParts.join('<br><br>');
     } else {
         sdgSummaryTextEl.innerHTML = 'Each choice in the lifecycle has an impact on global development goals.';
     }
+}
+
+function updateStakeholderChart(selections) {
+    const finalScores = { 'Workers': 0, 'Community': 0, 'Environment': 0, 'Consumer': 0, 'Company': 0 };
+    selections.forEach(sel => {
+        for (const stakeholder of stakeholderLabels) {
+            finalScores[stakeholder] += sel.stakeholders[stakeholder] || 0;
+        }
+    });
+    stakeholderChart.data.datasets[0].data = stakeholderLabels.map(label => finalScores[label]);
+    stakeholderChart.update();
 }
 
 
